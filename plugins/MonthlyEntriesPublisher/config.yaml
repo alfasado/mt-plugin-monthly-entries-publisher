@@ -1,0 +1,26 @@
+id: MonthlyEntriesPublisher
+name: MonthlyEntriesPublisher
+key: monthlyentriespublisher
+version: 0.1
+author_name: Alfasado Inc.
+author_link: http://alfasado.net/
+description: Publish Multiple Websites/Blogs Monthly Archive.
+callbacks:
+    cms_post_save.entry: $monthlyentriespublisher::MonthlyEntriesPublisher::Callbacks::_update_entry
+    cms_post_delete.entry: $monthlyentriespublisher::MonthlyEntriesPublisher::Callbacks::_update_entry
+    scheduled_post_published: $monthlyentriespublisher::MonthlyEntriesPublisher::Callbacks::_scheduled_update_entry
+    unpublish_past_entries: $monthlyentriespublisher::MonthlyEntriesPublisher::Callbacks::_scheduled_update_entry
+task_workers:
+    monthly_entries_publisher:
+        label: Monthly Entries Publisher
+        class: 'MonthlyEntriesPublisher::Worker::Publisher'
+config_settings:
+    MonthlyEntriesPublisherTemplateIds:
+        default: 73
+        updatable: 1
+    MonthlyEntriesPublisherCountBegin:
+        default: '<!--EntriesCount:'
+        updatable: 1
+    MonthlyEntriesPublisherCountEnd:
+        default: '-->'
+        updatable: 1
