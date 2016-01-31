@@ -75,6 +75,7 @@ sub work {
                     my $count = $res;
                     $count =~ s/^.*?$begin(.*?)$end.*$/$1/si;
                     $count += 0;
+                    $res =~ s/$begin.*?$end//si;
                     my $fmgr = MT::FileMgr->new( 'Local' )
                         or die MT::FileMgr->errstr;
                     if ( $count ) {
