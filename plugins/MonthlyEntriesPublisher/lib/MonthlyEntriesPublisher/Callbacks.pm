@@ -3,7 +3,6 @@ package MonthlyEntriesPublisher::Callbacks;
 use strict;
 use warnings;
 use File::Spec;
-use Data::Dumper;
 use MT::TheSchwartz;
 use TheSchwartz::Job;
 use MT::Serialize;
@@ -11,6 +10,14 @@ use MT::Entry;
 
 sub _update_entry {
     my ( $cb, $app, $obj, $original ) = @_;
+    my $blog_ids = MT->config( 'MonthlyEntriesPublisherBlogIds' );
+    if ( $blog_ids ) {
+        my @target_ids = split( /\s*,\s*/, $blog_ids );
+        my $blog_id = $obj->blog_id;
+        if (! grep( /^$blog_id$/, @target_ids ) ) {
+            return 1;
+        }
+    }
     my $orig_date = $original->authored_on if defined $original;
     my $date = $obj->authored_on;
     if ( $orig_date ) {

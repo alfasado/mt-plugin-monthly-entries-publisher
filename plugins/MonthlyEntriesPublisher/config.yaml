@@ -18,6 +18,9 @@ config_settings:
     MonthlyEntriesPublisherTemplateIds:
         default: 73
         updatable: 1
+    MonthlyEntriesPublisherBlogIds:
+        default: 1,2
+        updatable: 1
     MonthlyEntriesPublisherCountBegin:
         default: '<!--EntriesCount:'
         updatable: 1
