@@ -10,12 +10,26 @@ use MT::Entry;
 
 sub _update_entry {
     my ( $cb, $app, $obj, $original ) = @_;
-    my $blog_ids = MT->config( 'MonthlyEntriesPublisherBlogIds' );
-    if ( $blog_ids ) {
-        my @target_ids = split( /\s*,\s*/, $blog_ids );
-        my $blog_id = $obj->blog_id;
-        if (! grep( /^$blog_id$/, @target_ids ) ) {
-            return 1;
+    my $_ids = MT->config( 'MonthlyEntriesPublisherIds' );
+    my @template_ids;
+    if ( $_ids ) {
+        my @ids = split( /%%/, $_ids );
+        for my $id( @ids ) {
+            my ( $template_id, $blog_ids ) = split( /\s*=\s*/, $id );
+            my @target_ids = split( /\s*,\s*/, $blog_ids );
+            my $blog_id = $obj->blog_id;
+            if ( grep( /^$blog_id$/, @target_ids ) ) {
+                push( @template_ids, $template_id );
+            }
+        }
+    } else {
+        my $blog_ids = MT->config( 'MonthlyEntriesPublisherBlogIds' );
+        if ( $blog_ids ) {
+            my @target_ids = split( /\s*,\s*/, $blog_ids );
+            my $blog_id = $obj->blog_id;
+            if (! grep( /^$blog_id$/, @target_ids ) ) {
+                return 1;
+            }
         }
     }
     my $orig_date = $original->authored_on if defined $original;
@@ -70,6 +84,7 @@ sub _update_entry {
         $data->{ current_timestamp } = $start;
         $data->{ current_timestamp_end } = $end;
         $data->{ archive_date } = $date;
+        $data->{ template_ids } = \@template_ids;
         my $ser = MT::Serialize->serialize( \$data );
         $job->arg( $ser );
         MT::TheSchwartz->insert( $job );

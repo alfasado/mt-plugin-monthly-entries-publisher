@@ -1,7 +1,7 @@
 id: MonthlyEntriesPublisher
 name: MonthlyEntriesPublisher
 key: monthlyentriespublisher
-version: 0.1
+version: 0.2
 author_name: Alfasado Inc.
 author_link: http://alfasado.net/
 description: Publish Multiple Websites/Blogs Monthly Archive.
@@ -16,14 +16,17 @@ task_workers:
         class: 'MonthlyEntriesPublisher::Worker::Publisher'
 config_settings:
     MonthlyEntriesPublisherTemplateIds:
-        default: 73
+        default: 0
         updatable: 1
     MonthlyEntriesPublisherBlogIds:
-        default: 1,2
+        default: 0
         updatable: 1
     MonthlyEntriesPublisherCountBegin:
         default: '<!--EntriesCount:'
         updatable: 1
     MonthlyEntriesPublisherCountEnd:
         default: '-->'
+        updatable: 1
+    MonthlyEntriesPublisherIds:
+        default: 208=1,2
         updatable: 1

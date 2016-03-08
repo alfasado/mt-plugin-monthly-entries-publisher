@@ -35,6 +35,10 @@ sub work {
         my $current_timestamp_end = $$data->{ current_timestamp_end };
         my $result;
         my $error;
+        my $job_template_ids = $$data->{ template_ids };
+        if ( $job_template_ids ) {
+            @tmpl_ids = @$job_template_ids;
+        }
         for my $id( @tmpl_ids ) {
             my $tmpl = MT->model( 'template' )->load( $id );
             if ( $tmpl ) {
